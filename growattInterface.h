@@ -25,7 +25,7 @@ class growattIF {
     struct modbus_input_registers
     {
       int status;
-      float solarpower, pv1voltage, pv1current, pv1power, pv2voltage, pv2current, pv2power, outputpower, gridfrequency, gridph1voltage, gridph2voltage, gridph3voltage;
+      float solarpower, pv1voltage, pv1current, pv1power, pv2voltage, pv2current, pv2power, outputpower, gridfrequency, gridph1voltage, gridph2voltage, gridph3voltage, lineph1voltage, lineph2voltage, lineph3voltage;
       float energytoday, energytotal, totalworktime, pv1energytoday, pv1energytotal, pv2energytoday, pv2energytotal, opfullpower;
       float tempinverter, tempipm, tempboost;
       int ipf, realoppercent, deratingmode, faultcode, faultbitcode, warningbitcode;
