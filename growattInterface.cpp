@@ -72,9 +72,15 @@ uint8_t growattIF::ReadInputRegisters(char* json) {
       // Output
       modbusdata.outputpower = ((growattInterface.getResponseBuffer(35) << 16) | growattInterface.getResponseBuffer(36)) * 0.1;
       modbusdata.gridfrequency = growattInterface.getResponseBuffer(37) * 0.01;
-      modbusdata.gridvoltage = growattInterface.getResponseBuffer(38) * 0.1;
+      modbusdata.gridph1voltage = growattInterface.getResponseBuffer(38) * 0.1;
+      modbusdata.gridph2voltage = growattInterface.getResponseBuffer(38) * 0.1;
+      modbusdata.gridph3voltage = growattInterface.getResponseBuffer(38) * 0.1;
+      
+      modbusdata.lineph1voltage = growattInterface.getResponseBuffer(50) * 0.1;
+      modbusdata.lineph2voltage = growattInterface.getResponseBuffer(51) * 0.1;      
+      modbusdata.lineph3voltage = growattInterface.getResponseBuffer(52) * 0.1; 
 
-      // Energy
+            // Energy
       modbusdata.energytoday = ((growattInterface.getResponseBuffer(53) << 16) | growattInterface.getResponseBuffer(54)) * 0.1;
       modbusdata.energytotal = ((growattInterface.getResponseBuffer(55) << 16) | growattInterface.getResponseBuffer(56)) * 0.1;
       modbusdata.totalworktime = ((growattInterface.getResponseBuffer(57) << 16) | growattInterface.getResponseBuffer(58)) * 0.5;
@@ -194,7 +200,13 @@ uint8_t growattIF::ReadInputRegisters(char* json) {
 
   sprintf(json, "%s \"outputpower\":%.1f,", json, modbusdata.outputpower);
   sprintf(json, "%s \"gridfrequency\":%.2f,", json, modbusdata.gridfrequency);
-  sprintf(json, "%s \"gridvoltage\":%.1f,", json, modbusdata.gridvoltage);
+  sprintf(json, "%s \"gridph1voltage\":%.1f,", json, modbusdata.gridph1voltage);
+  sprintf(json, "%s \"gridph2voltage\":%.1f,", json, modbusdata.gridph2voltage);
+  sprintf(json, "%s \"gridph3voltage\":%.1f,", json, modbusdata.gridph3voltage);
+
+  sprintf(json, "%s \"lineph1voltage\":%.1f,", json, modbusdata.lineph1voltage);
+  sprintf(json, "%s \"lineph2voltage\":%.1f,", json, modbusdata.lineph2voltage);
+  sprintf(json, "%s \"lineph3voltage\":%.1f,", json, modbusdata.lineph3voltage);
 
   sprintf(json, "%s \"energytoday\":%.1f,", json, modbusdata.energytoday);
   sprintf(json, "%s \"energytotal\":%.1f,", json, modbusdata.energytotal);
