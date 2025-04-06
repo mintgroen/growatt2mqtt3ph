@@ -73,8 +73,8 @@ uint8_t growattIF::ReadInputRegisters(char* json) {
       modbusdata.outputpower = ((growattInterface.getResponseBuffer(35) << 16) | growattInterface.getResponseBuffer(36)) * 0.1;
       modbusdata.gridfrequency = growattInterface.getResponseBuffer(37) * 0.01;
       modbusdata.gridph1voltage = growattInterface.getResponseBuffer(38) * 0.1;
-      modbusdata.gridph2voltage = growattInterface.getResponseBuffer(38) * 0.1;
-      modbusdata.gridph3voltage = growattInterface.getResponseBuffer(38) * 0.1;
+      modbusdata.gridph2voltage = growattInterface.getResponseBuffer(42) * 0.1;
+      modbusdata.gridph3voltage = growattInterface.getResponseBuffer(46) * 0.1;
       
       modbusdata.lineph1voltage = growattInterface.getResponseBuffer(50) * 0.1;
       modbusdata.lineph2voltage = growattInterface.getResponseBuffer(51) * 0.1;      
