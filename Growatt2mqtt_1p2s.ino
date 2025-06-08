@@ -1,7 +1,8 @@
 // Growatt Solar Inverter to MQTT
 // Repo: https://github.com/nygma2004/growatt2mqtt
 // author: Csongor Varga, csongor.varga@gmail.com
-// 1 Phase, 2 string inverter version such as MIN 3000 TL-XE, MIC 1500 TL-X
+// updated by M. in 't Groen mintgn@gmail.com
+// 1/3 Phase, 1/2 string inverter version such as MIN 3000 TL-XE, MIC 1500 TL-X
 
 // Libraries:
 // - FastLED by Daniel Garcia
@@ -18,7 +19,7 @@
 #include <PubSubClient.h>         // MQTT support
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
-#include <FastLED.h>
+// #include <FastLED.h>
 #include "globals.h"
 #include "settings.h"
 #include "growattInterface.h"
@@ -28,25 +29,26 @@ ESP8266WebServer server(80);
 WiFiClient espClient;
 PubSubClient mqtt(mqtt_server, 1883, 0, espClient);
 
-CRGB leds[NUM_LEDS];
+// CRGB leds[NUM_LEDS];
 growattIF growattInterface(MAX485_RE_NEG, MAX485_DE, MAX485_RX, MAX485_TX);
 
 void ReadInputRegisters() {
   char json[1024];
   char topic[80];
 
-  leds[0] = CRGB::Yellow;
-  FastLED.show();
+// leds[0] = CRGB::Yellow;
+// FastLED.show();
   uint8_t result;
 
   digitalWrite(STATUS_LED, 0);
 
   result = growattInterface.ReadInputRegisters(json);
   if (result == growattInterface.Success) {
-    leds[0] = CRGB::Green;
-    FastLED.show();
-    lastRGB = millis();
-    ledoff = true;
+    Serial.print(F("Read Input Registers: Success"));
+//    leds[0] = CRGB::Green;
+//    FastLED.show();
+//    lastRGB = millis();
+//    ledoff = true;
 
 #ifdef DEBUG_SERIAL
     Serial.println(result);
@@ -56,10 +58,10 @@ void ReadInputRegisters() {
     Serial.println("Data MQTT sent");
 
   } else if (result != growattInterface.Continue) {
-    leds[0] = CRGB::Red;
-    FastLED.show();
-    lastRGB = millis();
-    ledoff = true;
+//  leds[0] = CRGB::Red;
+//  FastLED.show();
+//  lastRGB = millis();
+//  ledoff = true;
 
     Serial.print(F("Error: "));
     String message = growattInterface.sendModbusError(result);
@@ -76,21 +78,23 @@ void ReadHoldingRegisters() {
   char json[1024];
   char topic[80];
 
-  leds[0] = CRGB::Yellow;
-  FastLED.show();
+//  leds[0] = CRGB::Yellow;
+//  FastLED.show();
   uint8_t result;
 
   digitalWrite(STATUS_LED, 0);
   result = growattInterface.ReadHoldingRegisters(json);
   if (result == growattInterface.Success)   {
-    leds[0] = CRGB::Green;
-    FastLED.show();
-    lastRGB = millis();
-    ledoff = true;
+    Serial.print(F("Read holding registers: Success"));
+//    leds[0] = CRGB::Green;
+//    FastLED.show();
+//    lastRGB = millis();
+//    ledoff = true;
 
 #ifdef DEBUG_SERIAL
     Serial.println(json);
 #endif
+
     sprintf(topic, "%s/settings", topicRoot);
     mqtt.publish(topic, json);
     Serial.println("Setting MQTT sent");
@@ -98,10 +102,10 @@ void ReadHoldingRegisters() {
     holdingregisters = true;
 
   } else if (result != growattInterface.Continue) {
-    leds[0] = CRGB::Red;
-    FastLED.show();
-    lastRGB = millis();
-    ledoff = true;
+//    leds[0] = CRGB::Red;
+//    FastLED.show();
+//    lastRGB = millis();
+//    ledoff = true;
 
     Serial.print(F("Error: "));
     String message = growattInterface.sendModbusError(result);
@@ -168,17 +172,17 @@ void reconnect() {
       Serial.print(F("failed, rc="));
       Serial.print(mqtt.state());
       Serial.println(F(" try again in 5 seconds"));
-      // Wait 5 seconds before retrying
-      delay(5000);
+      // Wait 0.5 seconds before retrying
+      delay(500);
     }
   }
 }
 
 void setup() {
-  FastLED.addLeds<LED_TYPE, RGBLED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalSMD5050 );
-  FastLED.setBrightness( BRIGHTNESS );
-  leds[0] = CRGB::Pink;
-  FastLED.show();
+//  FastLED.addLeds<LED_TYPE, RGBLED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalSMD5050 );
+//  FastLED.setBrightness( BRIGHTNESS );
+//  leds[0] = CRGB::Pink;
+//  FastLED.show();
 
   Serial.begin(SERIAL_RATE);
   Serial.println(F("\nGrowatt Solar Inverter to MQTT Gateway"));
@@ -188,8 +192,8 @@ void setup() {
   // Initialize some variables
   uptime = 0;
   seconds = 0;
-  leds[0] = CRGB::Pink;
-  FastLED.show();
+//  leds[0] = CRGB::Pink;
+//  FastLED.show();
 
   // Connect to Wifi
   Serial.print(F("Connecting to Wifi"));
@@ -224,9 +228,9 @@ void setup() {
   growattInterface.initGrowatt();
   Serial.println("Modbus connection is set up");
 
-  // Create the 1 second timer interrupt
+  // Create the 0.5-1 second timer interrupt
   os_timer_setfn(&myTimer, timerCallback, NULL);
-  os_timer_arm(&myTimer, 1000, true);
+  os_timer_arm(&myTimer, 500, true);
 
   server.on("/", []() {                       // Dummy page
     server.send(200, "text/plain", "Growatt Solar Inverter to MQTT Gateway");
@@ -275,8 +279,8 @@ void setup() {
   });
   ArduinoOTA.begin();
 
-  leds[0] = CRGB::Black;
-  FastLED.show();
+// leds[0] = CRGB::Black;
+// FastLED.show();
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -292,13 +296,17 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   char expectedTopic[40];
 
+#ifdef useGetSettings
   sprintf(expectedTopic, "%s/write/getSettings", topicRoot);
   if (strcmp(expectedTopic, topic) == 0) {
     if (strcmp((char *)payload, "ON") == 0) {
       holdingregisters = false;
     }
   }
+#endif
 
+#ifdef useSetEnable
+  // Enable / Disable the inverter
   sprintf(expectedTopic, "%s/write/setEnable", topicRoot);
   if (strcmp(expectedTopic, topic) == 0) {
     char json[50];
@@ -318,7 +326,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
       mqtt.publish(topic, json);
     }
   }
+#endif
 
+#ifdef useSetMaxOutput
   sprintf(expectedTopic, "%s/write/setMaxOutput", topicRoot);
   if (strcmp(expectedTopic, topic) == 0) {
     char json[50];
@@ -333,7 +343,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
       mqtt.publish(topic, json);
     }
   }
+#endif
 
+#ifdef useStartVoltage
   sprintf(expectedTopic, "%s/write/setStartVoltage", topicRoot);
   if (strcmp(expectedTopic, topic) == 0) {
     char json[50];
@@ -348,6 +360,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
       mqtt.publish(topic, json);
     }
   }
+#endif
 
 #ifdef useModulPower
   sprintf(expectedTopic, "%s/write/setModulPower", topicRoot);
@@ -409,9 +422,9 @@ void loop() {
     lastWifiCheck = millis();
   }
 
-  if (ledoff && (millis() - lastRGB >= RGBSTATUSDELAY)) {
-    ledoff = false;
-    leds[0] = CRGB::Black;
-    FastLED.show();
-  }
+//  if (ledoff && (millis() - lastRGB >= RGBSTATUSDELAY)) {
+//    ledoff = false;
+//    leds[0] = CRGB::Black;
+//    FastLED.show();
+//  }
 }
