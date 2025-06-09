@@ -1,7 +1,5 @@
 // #define DEBUG_SERIAL      1
 // #define DEBUG_MQTT        1
-// #define Inverter3Phase    1
-// #define Inverter2String   1 
 // #define useModulPower     1
 // #define useStartVoltage   1
 // #define useGetSettings    1
@@ -9,10 +7,10 @@
 // #define useEnableSettings 1
 
 #define SERIAL_RATE     115200    // Serial speed for status info
-#define MAX485_DE       5         // D1, DE pin on the TTL to RS485 converter
-#define MAX485_RE_NEG   4         // D2, RE pin on the TTL to RS485 converter
-#define MAX485_RX       13        // D5, TX pin on the TTL to RS485 converter
-#define MAX485_TX       12        // D6, RX pin on the TTL to RS485 converter
+#define MAX485_DE       5         // D1, Optional DE pin on the TTL to RS485 converter
+#define MAX485_RE_NEG   4         // D2, Optional RE pin on the TTL to RS485 converter
+#define MAX485_RX       12        // D5, Rx pin on the TTL to RS485 converter
+#define MAX485_TX       14        // D6, Tx pin on the TTL to RS485 converter
 #define STATUS_LED      2         // Status LED pin on the Wemos D1 mini (D4)
 #define UPDATE_MODBUS   2         // 1: modbus device is read every second
 #define UPDATE_STATUS   2        // 10: status mqtt message is sent every X seconds

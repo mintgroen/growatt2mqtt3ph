@@ -2,7 +2,7 @@
 // Repo: https://github.com/nygma2004/growatt2mqtt
 // author: Csongor Varga, csongor.varga@gmail.com
 // updated by M. in 't Groen mintgn@gmail.com
-// 1/3 Phase, 1/2 string inverter version such as MIN 3000 TL-XE, MIC 1500 TL-X
+// 1/3 Phase, 1-2 string inverter version such as MIN 3000 TL-XE, MIC 1500 TL-X
 
 // Libraries:
 // - FastLED by Daniel Garcia
