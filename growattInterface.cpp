@@ -64,31 +64,18 @@ uint8_t growattIF::ReadInputRegisters(char* json) {
       modbusdata.pv1voltage = growattInterface.getResponseBuffer(3) * 0.1;
       modbusdata.pv1current = growattInterface.getResponseBuffer(4) * 0.1;
       modbusdata.pv1power = ((growattInterface.getResponseBuffer(5) << 16) | growattInterface.getResponseBuffer(6)) * 0.1;
-
-      #ifdef Inverter2String
       modbusdata.pv2voltage = growattInterface.getResponseBuffer(7) * 0.1;
       modbusdata.pv2current = growattInterface.getResponseBuffer(8) * 0.1;
       modbusdata.pv2power = ((growattInterface.getResponseBuffer(9) << 16) | growattInterface.getResponseBuffer(10)) * 0.1;
-      #endif
 
       // Output
       modbusdata.outputpower = ((growattInterface.getResponseBuffer(35) << 16) | growattInterface.getResponseBuffer(36)) * 0.1;
       modbusdata.gridfrequency = growattInterface.getResponseBuffer(37) * 0.01;
       modbusdata.gridph1voltage = growattInterface.getResponseBuffer(38) * 0.1;
-      
-      #ifdef Inverter3Phase
       modbusdata.gridph2voltage = growattInterface.getResponseBuffer(42) * 0.1;
       modbusdata.gridph3voltage = growattInterface.getResponseBuffer(46) * 0.1;
-      #endif
 
-      modbusdata.lineph1voltage = growattInterface.getResponseBuffer(50) * 0.1;
-      
-      #ifdef Inverter3Phase
-      modbusdata.lineph2voltage = growattInterface.getResponseBuffer(51) * 0.1;      
-      modbusdata.lineph3voltage = growattInterface.getResponseBuffer(52) * 0.1; 
-      #endif
-
-            // Energy
+      // Energy
       modbusdata.energytoday = ((growattInterface.getResponseBuffer(53) << 16) | growattInterface.getResponseBuffer(54)) * 0.1;
       modbusdata.energytotal = ((growattInterface.getResponseBuffer(55) << 16) | growattInterface.getResponseBuffer(56)) * 0.1;
       modbusdata.totalworktime = ((growattInterface.getResponseBuffer(57) << 16) | growattInterface.getResponseBuffer(58)) * 0.5;
@@ -101,11 +88,10 @@ uint8_t growattIF::ReadInputRegisters(char* json) {
     }
 
     if (setcounter == 1) {    //register 64 -127
-      
-      #ifdef Inverter2String
+
       modbusdata.pv2energytoday = ((overflow << 16) | growattInterface.getResponseBuffer(64 - 64)) * 0.1;
       modbusdata.pv2energytotal = ((growattInterface.getResponseBuffer(65 - 64) << 16) | growattInterface.getResponseBuffer(66 - 64)) * 0.1;
-      #endif
+      
       // Temperatures
       modbusdata.tempinverter = growattInterface.getResponseBuffer(93 - 64) * 0.1;
       modbusdata.tempipm = growattInterface.getResponseBuffer(94 - 64) * 0.1;
@@ -204,42 +190,26 @@ uint8_t growattIF::ReadInputRegisters(char* json) {
   sprintf(json, "%s \"pv1voltage\":%.1f,", json, modbusdata.pv1voltage);
   sprintf(json, "%s \"pv1current\":%.1f,", json, modbusdata.pv1current);
   sprintf(json, "%s \"pv1power\":%.1f,", json, modbusdata.pv1power);
-  
-  #ifdef Inverter2String
   sprintf(json, "%s \"pv2voltage\":%.1f,", json, modbusdata.pv2voltage);
   sprintf(json, "%s \"pv2current\":%.1f,", json, modbusdata.pv2current);
   sprintf(json, "%s \"pv2power\":%.1f,", json, modbusdata.pv2power);
-  #endif
-
+  
   sprintf(json, "%s \"outputpower\":%.1f,", json, modbusdata.outputpower);
   sprintf(json, "%s \"gridfrequency\":%.2f,", json, modbusdata.gridfrequency);
   sprintf(json, "%s \"gridph1voltage\":%.1f,", json, modbusdata.gridph1voltage);
   
-  #ifdef Inverter3Phase
   sprintf(json, "%s \"gridph2voltage\":%.1f,", json, modbusdata.gridph2voltage);
   sprintf(json, "%s \"gridph3voltage\":%.1f,", json, modbusdata.gridph3voltage);
-  #endif
-
-  sprintf(json, "%s \"lineph1voltage\":%.1f,", json, modbusdata.lineph1voltage);
   
-  #ifdef Inverter3Phase
-  sprintf(json, "%s \"lineph2voltage\":%.1f,", json, modbusdata.lineph2voltage);
-  sprintf(json, "%s \"lineph3voltage\":%.1f,", json, modbusdata.lineph3voltage);
-  #endif
-
   sprintf(json, "%s \"energytoday\":%.1f,", json, modbusdata.energytoday);
   sprintf(json, "%s \"energytotal\":%.1f,", json, modbusdata.energytotal);
   sprintf(json, "%s \"totalworktime\":%.1f,", json, modbusdata.totalworktime);
   sprintf(json, "%s \"pv1energytoday\":%.1f,", json, modbusdata.pv1energytoday);
-  sprintf(json, "%s \"pv1energytotal\":%.1f,", json, modbusdata.pv1energytotal);
-  
-  #ifdef Inverter2String
+  sprintf(json, "%s \"pv1energytotal\":%.1f,", json, modbusdata.pv1energytotal);  
   sprintf(json, "%s \"pv2energytoday\":%.1f,", json, modbusdata.pv2energytoday);
   sprintf(json, "%s \"pv2energytotal\":%.1f,", json, modbusdata.pv2energytotal);
-  #endif
   
   sprintf(json, "%s \"opfullpower\":%.1f,", json, modbusdata.opfullpower);
-
   sprintf(json, "%s \"tempinverter\":%.1f,", json, modbusdata.tempinverter);
   sprintf(json, "%s \"tempipm\":%.1f,", json, modbusdata.tempipm);
   sprintf(json, "%s \"tempboost\":%.1f,", json, modbusdata.tempboost);
