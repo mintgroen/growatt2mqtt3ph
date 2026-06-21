@@ -34,7 +34,7 @@ const char* clientID = "solarx";            // MQTT client ID
 const char* topicRoot = "solarx";           // MQTT root topic for the device, keep / at the end
 
 
-// Uncomment the section below for dynamic IP (including the define)
+// Uncomment the section below for a static IP (including the define)
 // #define FIXEDIP   1
 // IPAddress local_IP(192, 168, 1, 205);         // Set your Static IP address
 // IPAddress gateway(192, 168, 1, 254);          // Set your Gateway IP address
